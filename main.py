@@ -31,12 +31,16 @@ def initialize_llm(model_name: str, **kwargs):
         temperature = kwargs.get('temperature', 0.7)
         max_tokens = kwargs.get('max_output_tokens', kwargs.get('max_tokens', 4000))
         
+        # Filter out already-used parameters from model_kwargs
+        filtered_kwargs = {k: v for k, v in kwargs.items() 
+                         if k not in ['temperature', 'max_output_tokens', 'max_tokens']}
+        
         # Initialize the model
         llm = init_chat_model(
             model=model_name,
             temperature=temperature,
             max_tokens=max_tokens,
-            model_kwargs=kwargs
+            model_kwargs=filtered_kwargs
         )
         
         return llm

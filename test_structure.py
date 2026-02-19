@@ -6,8 +6,8 @@ import os
 import sys
 import json
 
-# Add the src directory to the path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+# Add the project root to the path
+sys.path.insert(0, os.path.dirname(__file__))
 
 
 def test_config_loading():

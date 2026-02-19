@@ -108,6 +108,9 @@ Ensure the JSON is valid and complete."""
             if len(post_data["slides"]) > self.max_slides:
                 self.logger.warning(f"Post has {len(post_data['slides'])} slides, truncating to {self.max_slides}")
                 post_data["slides"] = post_data["slides"][:self.max_slides]
+                # Renumber slides to be sequential
+                for idx, slide in enumerate(post_data["slides"], start=1):
+                    slide["page_number"] = idx
             
             self.logger.info(f"Successfully drafted post with {len(post_data['slides'])} slides")
             

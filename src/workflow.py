@@ -7,6 +7,7 @@ import logging
 from typing import Dict, Any, TypedDict, Annotated
 from langgraph.graph import StateGraph, END
 from langgraph.graph.message import add_messages
+from langchain_core.messages import SystemMessage
 
 
 class WorkflowState(TypedDict):
@@ -83,10 +84,9 @@ class InstagramWorkflow:
         research_data = self.researcher.research(topic)
         
         state["research_data"] = research_data
-        state["messages"].append({
-            "role": "system",
-            "content": f"Research completed for topic: {topic}"
-        })
+        state["messages"].append(
+            SystemMessage(content=f"Research completed for topic: {topic}")
+        )
         
         return state
     
@@ -98,10 +98,9 @@ class InstagramWorkflow:
         post_data = self.drafter.draft_post(research_data)
         
         state["post_data"] = post_data
-        state["messages"].append({
-            "role": "system",
-            "content": f"Draft completed with {post_data.get('slide_count', 0)} slides"
-        })
+        state["messages"].append(
+            SystemMessage(content=f"Draft completed with {post_data.get('slide_count', 0)} slides")
+        )
         
         return state
     
@@ -117,10 +116,9 @@ class InstagramWorkflow:
         
         state["review_decision"] = review_decision
         state["iteration"] = iteration + 1
-        state["messages"].append({
-            "role": "system",
-            "content": f"Review completed. Decision: {review_decision.get('decision')}"
-        })
+        state["messages"].append(
+            SystemMessage(content=f"Review completed. Decision: {review_decision.get('decision')}")
+        )
         
         return state
     
@@ -140,10 +138,9 @@ class InstagramWorkflow:
         
         state["research_data"] = updated_research
         state["post_data"] = updated_post
-        state["messages"].append({
-            "role": "system",
-            "content": f"Revision completed based on: {review_decision.get('decision')}"
-        })
+        state["messages"].append(
+            SystemMessage(content=f"Revision completed based on: {review_decision.get('decision')}")
+        )
         
         return state
     
@@ -152,10 +149,9 @@ class InstagramWorkflow:
         self.logger.info("=== FINALIZE NODE ===")
         
         state["final_post"] = state["post_data"]
-        state["messages"].append({
-            "role": "system",
-            "content": "Post finalized and ready for publication"
-        })
+        state["messages"].append(
+            SystemMessage(content="Post finalized and ready for publication")
+        )
         
         return state
     
