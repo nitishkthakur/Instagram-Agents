@@ -61,6 +61,10 @@ local_settings.py
 db.sqlite3
 db.sqlite3-journal
 
+# Instagram Agents specific
+instagram_post_*.json
+instagram_agents.log
+
 # Flask stuff:
 instance/
 .webassets-cache
