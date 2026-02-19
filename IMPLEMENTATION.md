@@ -18,6 +18,7 @@ Successfully implemented a complete agentic workflow for creating Instagram post
    - Generates structured JSON output with layout information
    - Includes proper formatting with bold text for key terms
    - Targets data science professionals with 2-3 years experience
+   - **Style Vault Integration**: References example posts for consistency
 
 3. **Editor in Chief Agent** (`src/editor_agent.py`)
    - ReAct agent that reviews post quality
@@ -61,6 +62,7 @@ Supported models:
 ✅ Iterative feedback loop for quality improvement
 ✅ Configurable via JSON file
 ✅ Multi-provider LLM support
+✅ **Style Vault** for maintaining consistent post quality and style
 
 ### Quality Assurance
 ✅ Comprehensive logging system
@@ -68,6 +70,7 @@ Supported models:
 ✅ JSON parsing with markdown block extraction
 ✅ Slide numbering validation and correction
 ✅ Word count tracking
+✅ **Style reference examples** for agents
 
 ### Developer Experience
 ✅ Clear separation of concerns (agent classes)
@@ -76,6 +79,7 @@ Supported models:
 ✅ Utility functions for common operations
 ✅ Test suite for structure validation
 ✅ Example usage script
+✅ **Style vault parser** for managing example posts
 
 ## Files Created
 
@@ -87,6 +91,7 @@ Supported models:
 - `src/editor_agent.py` - Editor agent implementation
 - `src/workflow.py` - LangGraph workflow orchestration
 - `src/utils.py` - Utility functions (logging, formatting, etc.)
+- `src/style_vault_parser.py` - **Style vault parser for example posts**
 
 ### Configuration & Documentation
 - `config.json` - Complete configuration with detailed instructions
@@ -95,6 +100,9 @@ Supported models:
 - `README.md` - Comprehensive documentation
 - `example_usage.py` - Usage examples and environment check
 - `test_structure.py` - Structure validation tests
+- `test_style_vault.py` - **Style vault functionality tests**
+- `style_vault.md` - **Example Instagram posts for style reference**
+- `demo_style_vault.py` - **Style vault demonstration script**
 
 ### Updates
 - `.gitignore` - Added output files and logs
@@ -139,6 +147,76 @@ Complete trace of:
 - Revision actions
 - Final approval
 
+## Style Vault Feature
+
+### Overview
+The Style Vault (`style_vault.md`) is a markdown-based reference library containing example Instagram posts. These examples guide the AI agents to maintain consistent quality, tone, and formatting across all generated posts.
+
+### Key Features
+- **Example Posts**: Complete multi-slide Instagram posts with metadata
+- **Tag-Based Format**: Posts enclosed in `<post>` tags with attributes (id, topic, style, slides)
+- **Structured Content**: Each slide includes title, content, and layout description
+- **Parser Utility**: Python parser (`src/style_vault_parser.py`) to extract and format examples
+- **Agent Integration**: Drafter agent automatically references examples when enabled
+
+### Format
+```markdown
+<post id="unique-id" topic="Topic Name" style="educational-technical" slides="9">
+
+### Slide 1
+**Title:** Title Text
+**Content:**  
+Content with @learningalgorithm
+
+**Layout:** Layout description
+
+---
+
+### Slide 2
+...
+
+</post>
+```
+
+### Usage
+Enable in `config.json`:
+```json
+{
+  "drafter": {
+    "use_style_vault": true,
+    "style_vault_file": "style_vault.md"
+  }
+}
+```
+
+### Benefits
+1. **Consistency**: Maintain brand voice across all posts
+2. **Quality**: Show agents examples of excellent posts
+3. **Flexibility**: Easy to add new examples as style evolves
+4. **Learning**: Build institutional knowledge of what works
+
+### Parser API
+```python
+from src.style_vault_parser import StyleVaultParser
+
+parser = StyleVaultParser("style_vault.md")
+
+# Load all posts
+posts = parser.load_style_vault()
+
+# Get specific post
+post = parser.get_post_by_id("random-forests-example")
+
+# Search by topic
+matching = parser.get_posts_by_topic("Neural Networks")
+
+# Filter by style
+styled = parser.get_posts_by_style("educational-technical")
+
+# Format for LLM prompt
+examples = parser.get_style_examples_for_prompt(limit=2)
+```
+
 ## Testing
 
 ### Structure Tests
@@ -147,6 +225,13 @@ Complete trace of:
 ✅ Config has required fields and valid types
 ✅ Logging system initializes
 ✅ Post formatting works correctly
+
+### Style Vault Tests
+✅ Style vault loads and parses correctly (7 tests)
+✅ Post retrieval by ID, topic, and style
+✅ Slide structure validation
+✅ Example formatting for LLM prompts
+✅ Error handling for missing/invalid files
 
 ### Code Quality
 ✅ All Python files compile without syntax errors
