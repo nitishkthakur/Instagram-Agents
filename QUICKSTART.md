@@ -60,6 +60,7 @@ python visualize_workflow.py
 ### Run Tests
 ```bash
 python test_structure.py
+python test_style_vault.py  # Test style vault functionality
 ```
 
 ## Configuration
@@ -76,7 +77,9 @@ Edit `config.json` to customize:
   "drafter": {
     "model": "gpt-4o",
     "temperature": 0.8,
-    "max_slides": 10            // 1-10 slides
+    "max_slides": 10,           // 1-10 slides
+    "use_style_vault": true,    // Enable style examples
+    "style_vault_file": "style_vault.md"
   },
   "editor_in_chief": {
     "model": "gpt-4o",
@@ -84,6 +87,17 @@ Edit `config.json` to customize:
   }
 }
 ```
+
+## Style Vault
+
+The **Style Vault** (`style_vault.md`) contains example posts that guide the AI agents:
+
+- 📝 View examples: Open `style_vault.md`
+- ➕ Add your own: Follow the format in the file
+- 🎨 Each example shows structure, tone, and formatting
+- ✅ Agents reference these to maintain consistency
+
+**Quick tip:** Add your best posts to the Style Vault to teach the AI your preferred style!
 
 ## Output
 

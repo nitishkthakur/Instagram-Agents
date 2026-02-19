@@ -7,6 +7,7 @@ import json
 import logging
 from typing import Dict, Any, List
 from langchain_core.messages import HumanMessage, SystemMessage
+from src.style_vault_parser import StyleVaultParser
 
 
 class DrafterAgent:
@@ -25,6 +26,19 @@ class DrafterAgent:
         self.max_slides = config.get("max_slides", 10)
         self.instructions = config.get("instructions", "")
         self.logger = logging.getLogger(__name__)
+        
+        # Style vault configuration
+        self.use_style_vault = config.get("use_style_vault", False)
+        self.style_vault_file = config.get("style_vault_file", "style_vault.md")
+        self.style_vault_parser = None
+        
+        if self.use_style_vault:
+            try:
+                self.style_vault_parser = StyleVaultParser(self.style_vault_file)
+                self.logger.info(f"Style vault enabled: {self.style_vault_file}")
+            except Exception as e:
+                self.logger.warning(f"Failed to initialize style vault: {str(e)}")
+                self.use_style_vault = False
         
     def draft_post(self, research_data: Dict[str, Any], revision_feedback: str = None) -> Dict[str, Any]:
         """
@@ -45,6 +59,16 @@ class DrafterAgent:
         if revision_feedback:
             revision_note = f"\n\n**IMPORTANT REVISION FEEDBACK:**\n{revision_feedback}\n\nPlease address this feedback in your revised draft."
         
+        # Load style examples if enabled
+        style_examples = ""
+        if self.use_style_vault and self.style_vault_parser:
+            try:
+                style_examples = "\n\n**STYLE REFERENCE:**\nUse the following examples as style references for tone, structure, and formatting:\n\n"
+                style_examples += self.style_vault_parser.get_style_examples_for_prompt(limit=2)
+            except Exception as e:
+                self.logger.warning(f"Failed to load style examples: {str(e)}")
+                style_examples = ""
+        
         human_message = HumanMessage(
             content=f"""Create an engaging Instagram carousel post (maximum {self.max_slides} slides) based on the following research.
 
@@ -52,6 +76,7 @@ Topic: {research_data.get('topic', 'N/A')}
 
 Research Content:
 {research_data.get('research_content', 'N/A')}
+{style_examples}
 {revision_note}
 
 Requirements:

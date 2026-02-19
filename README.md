@@ -7,6 +7,7 @@ An intelligent agentic workflow for creating high-quality Instagram carousel pos
 - 🔍 **Researcher Agent**: Uses Tavily Search API to gather comprehensive information on any topic
 - ✍️ **Drafter Agent**: Creates engaging Instagram carousel posts (up to 10 slides) with proper layout
 - 👔 **Editor in Chief Agent**: ReAct agent that reviews and provides feedback, can invoke subagents for revisions
+- 🎨 **Style Vault**: Reference library of example posts to maintain consistent style and quality
 - ⚙️ **Fully Configurable**: All agent instructions, models, and parameters configurable via `config.json`
 - 📊 **Comprehensive Logging**: All intermediate outputs logged for transparency
 - 🤖 **Multi-Model Support**: Compatible with OpenAI, Anthropic, Google Gemini, and xAI Grok models
@@ -172,6 +173,60 @@ The workflow is designed to create posts for data science professionals with 2-3
 - ✅ Maximum 10 slides per post
 - ✅ Include @learningalgorithm handle
 
+## Style Vault
+
+The **Style Vault** (`style_vault.md`) is a reference library containing examples of high-quality Instagram posts. These examples serve as style guides for the AI agents, ensuring consistency in tone, structure, and formatting.
+
+### What's in the Style Vault?
+
+Each example post includes:
+- Complete slide-by-slide content
+- Layout descriptions
+- Metadata (topic, style, target audience)
+- Formatting guidelines
+
+### Using the Style Vault
+
+The Drafter agent automatically references the Style Vault when creating new posts if enabled in `config.json`:
+
+```json
+{
+  "drafter": {
+    "use_style_vault": true,
+    "style_vault_file": "style_vault.md",
+    ...
+  }
+}
+```
+
+### Adding Your Own Examples
+
+To add new example posts to the Style Vault, use this format in `style_vault.md`:
+
+```markdown
+<post id="unique-id" topic="Topic Name" style="educational-technical" slides="9">
+
+### Slide 1
+**Title:** [Slide Title]
+**Content:**  
+[Your content here with @learningalgorithm]
+
+**Layout:** [Layout description]
+
+---
+
+### Slide 2
+...
+
+</post>
+```
+
+**Benefits:**
+- 📝 Maintain consistent brand voice and style
+- 🎯 Show agents exactly what "good" looks like
+- 🔄 Easily update style guidelines by adding examples
+- 📚 Build a library of proven post formats
+
 ## Logging
 
 All workflow steps are logged to `instagram_agents.log` (configurable):
@@ -188,17 +243,19 @@ All workflow steps are logged to `instagram_agents.log` (configurable):
 
 ```
 Instagram-Agents/
-├── main.py                 # Entry point
-├── config.json            # Configuration
-├── requirements.txt       # Dependencies
-├── .env.example          # Environment template
+├── main.py                      # Entry point
+├── config.json                  # Configuration
+├── style_vault.md              # Style reference examples
+├── requirements.txt            # Dependencies
+├── .env.example               # Environment template
 ├── src/
 │   ├── __init__.py
-│   ├── researcher_agent.py   # Research agent
-│   ├── drafter_agent.py      # Draft agent
-│   ├── editor_agent.py       # Editor agent
-│   ├── workflow.py           # LangGraph workflow
-│   └── utils.py              # Utilities
+│   ├── researcher_agent.py      # Research agent
+│   ├── drafter_agent.py         # Draft agent
+│   ├── editor_agent.py          # Editor agent
+│   ├── workflow.py              # LangGraph workflow
+│   ├── style_vault_parser.py   # Style vault parser
+│   └── utils.py                 # Utilities
 └── README.md
 ```
 

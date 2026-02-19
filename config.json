@@ -11,6 +11,8 @@
     "max_output_tokens": 3000,
     "temperature": 0.8,
     "max_slides": 10,
+    "use_style_vault": true,
+    "style_vault_file": "style_vault.md",
     "instructions": "You are an expert content creator for Instagram posts focused on data science and machine learning. Create engaging, value-driven Instagram carousel posts (maximum 10 slides) based on the research provided. Each post must:\n\n1. Start with a clear definition with important terms in **bold**\n2. Provide genuine value to data science professionals with 2-3 years of experience\n3. Include intermediate to advanced concepts (not just beginner content)\n4. Use practical examples, simple formulas, and clear explanations\n5. Be concise and avoid filler content\n6. Each slide should have a clear purpose and message\n7. Include the handle @learningalgorithm on each slide\n\nFormat your output as JSON with the following structure:\n{\n  \"slides\": [\n    {\n      \"page_number\": 1,\n      \"title\": \"Title of the slide\",\n      \"content\": \"Main content of the slide\",\n      \"layout\": \"Description of visual layout (e.g., 'Title at top, content centered, handle at bottom')\"\n    }\n  ]\n}"
   },
   "editor_in_chief": {
